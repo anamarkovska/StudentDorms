@@ -4,25 +4,42 @@ import jakarta.persistence.*
 
 @Entity
 @Table(name = "users")
-data class User(
+open class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null
 
-    val username: String,
+    var username: String = ""
 
-    val password: String,
+    var password: String = ""
 
-    val isAdmin: Boolean = false,
+    var isAdmin: Boolean = false
 
-    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL])
-    val posts: List<Post> = emptyList(),
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], targetEntity = Post::class)
+    var posts: List<Post> = emptyList()
 
-    @ManyToMany
+    @field:ManyToMany
     @JoinTable(
         name = "user_liked_posts",
         joinColumns = [JoinColumn(name = "user_id")],
         inverseJoinColumns = [JoinColumn(name = "post_id")]
     )
-    val likedPosts: List<Post> = emptyList(),
-)
+    var likedPosts: MutableSet<Post> = mutableSetOf()
+    constructor()
+
+    constructor(
+        id: Long?,
+        username: String,
+        password: String,
+        isAdmin: Boolean,
+        posts: List<Post> = emptyList(),
+        likedPosts: MutableSet<Post> // Changed to MutableSet<Post>
+    ) {
+        this.id = id
+        this.username = username
+        this.password = password
+        this.isAdmin = isAdmin
+        this.posts = posts
+        this.likedPosts = likedPosts
+    }
+}

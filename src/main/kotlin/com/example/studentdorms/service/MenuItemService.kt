@@ -9,4 +9,5 @@ interface MenuItemService {
     fun updateMenuItem(id: Long?, menuItem: MenuItem?): MenuItem?
     fun deleteMenuItem(id: Long?)
     fun getMenuItemsByCategory(id: Long) : List<MenuItem>?
+    fun getMenuItemsByStudentDorm(id:Long):List<MenuItem>?
 }

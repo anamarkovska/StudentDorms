@@ -1,8 +1,14 @@
 package com.example.studentdorms.api
 
-import com.example.studentdorms.service.MenuItemService
 import com.example.studentdorms.domain.MenuItem
+import com.example.studentdorms.service.MenuItemService
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
+import jakarta.transaction.Transactional
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+
 
 @RestController
 @RequestMapping("/menu")
@@ -13,9 +19,8 @@ class MenuItemController(private val menuItemService: MenuItemService) {
         return menuItemService.createMenuItem(menuItem)
     }
 
-    @GetMapping("/allItems")
+    @GetMapping
     fun getAllMenuItems(): List<MenuItem?>? {
-        System.out.println(menuItemService.getAllMenuItems())
         return menuItemService.getAllMenuItems()
     }
 
@@ -37,6 +42,11 @@ class MenuItemController(private val menuItemService: MenuItemService) {
     @GetMapping("/category/{categoryId}")
     fun getMenuItemsByCategory(@PathVariable categoryId: Long): List<MenuItem>? {
         return menuItemService.getMenuItemsByCategory(categoryId)
+    }
+
+    @GetMapping("/student-dorms/{dormId}")
+    fun getMenuItemsByStudentDorm(@PathVariable dormId:Long):List<MenuItem>?{
+        return menuItemService.getMenuItemsByStudentDorm(dormId)
     }
 
 }

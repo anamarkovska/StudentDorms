@@ -4,20 +4,30 @@ import java.time.LocalDateTime
 
 @Entity
 @Table(name = "comments")
-data class Comment(
+open class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    val id: Long? = null,
+    var id: Long? = null
 
-    val content: String,
+    var content: String = ""
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
-    val user: User,
+    var user: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id")
-    val post: Post,
+    var post: Post? = null
 
-    val createdAt: LocalDateTime = LocalDateTime.now(),
-)
+    var createdAt: LocalDateTime = LocalDateTime.now()
+
+    constructor()
+
+    constructor(id: Long?, content: String, user: User?, post: Post?, createdAt: LocalDateTime) {
+        this.id = id
+        this.content = content
+        this.user = user
+        this.post = post
+        this.createdAt = createdAt
+    }
+}

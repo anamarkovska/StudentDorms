@@ -7,4 +7,5 @@ import org.springframework.stereotype.Repository
 @Repository
 interface MenuItemRepository : JpaRepository<MenuItem,Long>{
     fun findByCategoryId(categoryId: Long): List<MenuItem>
+    fun findByStudentDormId(dormId:Long):List<MenuItem>
 }
