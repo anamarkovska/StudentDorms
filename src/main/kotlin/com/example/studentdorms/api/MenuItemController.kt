@@ -9,44 +9,58 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
-
 @RestController
 @RequestMapping("/menu")
 class MenuItemController(private val menuItemService: MenuItemService) {
 
-    @PostMapping
-    fun createMenuItem(@RequestBody menuItem: MenuItem): MenuItem? {
-        return menuItemService.createMenuItem(menuItem)
+    @GetMapping
+    fun getAllMenuItems(): ResponseEntity<List<MenuItem?>> {
+        val allMenuItems = menuItemService.getAllMenuItems()
+        return ResponseEntity.ok(allMenuItems)
     }
 
-    @GetMapping
-    fun getAllMenuItems(): List<MenuItem?>? {
-        return menuItemService.getAllMenuItems()
+    @PostMapping
+    fun createMenuItem(@RequestBody menuItem: MenuItem): ResponseEntity<MenuItem> {
+        val createdMenuItem = menuItemService.createMenuItem(menuItem)
+        return ResponseEntity.ok(createdMenuItem)
     }
 
     @GetMapping("/{id}")
-    fun getMenuItem(@PathVariable id: Long): MenuItem? {
-        return menuItemService.getMenuItemById(id)
+    fun getMenuItem(@PathVariable id: Long): ResponseEntity<MenuItem?> {
+        val menuItem = menuItemService.getMenuItemById(id)
+        return if (menuItem != null) {
+            ResponseEntity.ok(menuItem)
+        } else {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @PutMapping("/{id}")
-    fun updateMenuItem(@PathVariable id: Long, @RequestBody menuItem: MenuItem): MenuItem? {
-        return menuItemService.updateMenuItem(id, menuItem)
+    fun updateMenuItem(@PathVariable id: Long, @RequestBody menuItem: MenuItem): ResponseEntity<MenuItem?> {
+        val updatedMenuItem = menuItemService.updateMenuItem(id, menuItem)
+        return if (updatedMenuItem != null) {
+            ResponseEntity.ok(updatedMenuItem)
+        } else {
+            ResponseEntity.notFound().build()
+        }
     }
 
     @DeleteMapping("/{id}")
-    fun deleteMenuItem(@PathVariable id: Long) {
+    fun deleteMenuItem(@PathVariable id: Long): ResponseEntity<Unit> {
         menuItemService.deleteMenuItem(id)
+        return ResponseEntity.ok().build()
     }
 
     @GetMapping("/category/{categoryId}")
-    fun getMenuItemsByCategory(@PathVariable categoryId: Long): List<MenuItem>? {
-        return menuItemService.getMenuItemsByCategory(categoryId)
+    fun getMenuItemsByCategory(@PathVariable categoryId: Long): ResponseEntity<List<MenuItem>> {
+        val menuItemsByCategory = menuItemService.getMenuItemsByCategory(categoryId)
+        return ResponseEntity.ok(menuItemsByCategory)
     }
 
     @GetMapping("/student-dorms/{dormId}")
-    fun getMenuItemsByStudentDorm(@PathVariable dormId:Long):List<MenuItem>?{
-        return menuItemService.getMenuItemsByStudentDorm(dormId)
+    fun getMenuItemsByStudentDorm(@PathVariable dormId: Long): ResponseEntity<List<MenuItem>> {
+        val menuItemsByStudentDorm = menuItemService.getMenuItemsByStudentDorm(dormId)
+        return ResponseEntity.ok(menuItemsByStudentDorm)
     }
 
 }

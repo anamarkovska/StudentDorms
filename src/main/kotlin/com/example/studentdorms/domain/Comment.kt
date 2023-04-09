@@ -1,4 +1,5 @@
 package com.example.studentdorms.domain
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
 import java.time.LocalDateTime
 
@@ -13,9 +14,11 @@ open class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
+    @JsonIgnoreProperties("comments")
     var user: User? = null
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties("comments")
     @JoinColumn(name = "post_id")
     var post: Post? = null
 

@@ -1,5 +1,7 @@
 package com.example.studentdorms.domain
 
+import com.fasterxml.jackson.annotation.JsonIgnore
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import jakarta.persistence.*
 
 @Entity
@@ -15,16 +17,21 @@ open class User {
 
     var isAdmin: Boolean = false
 
+    @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], targetEntity = Comment::class)
+    var comments: List<Comment> = emptyList()
+
     @OneToMany(mappedBy = "user", cascade = [CascadeType.ALL], targetEntity = Post::class)
+    @JsonIgnore // Exclude posts from JSON serialization to break circular reference
     var posts: List<Post> = emptyList()
 
-    @field:ManyToMany
-    @JoinTable(
-        name = "user_liked_posts",
-        joinColumns = [JoinColumn(name = "user_id")],
-        inverseJoinColumns = [JoinColumn(name = "post_id")]
-    )
-    var likedPosts: MutableSet<Post> = mutableSetOf()
+//    @ManyToMany
+//    @JoinTable(
+//        name = "user_liked_posts",
+//        joinColumns = [JoinColumn(name = "user_id")],
+//        inverseJoinColumns = [JoinColumn(name = "post_id")]
+//    )
+//    var likedPosts: MutableSet<Post> = mutableSetOf()
+
     constructor()
 
     constructor(
@@ -33,13 +40,15 @@ open class User {
         password: String,
         isAdmin: Boolean,
         posts: List<Post> = emptyList(),
-        likedPosts: MutableSet<Post> // Changed to MutableSet<Post>
+        comments: List<Comment> = emptyList(),
+
     ) {
         this.id = id
         this.username = username
         this.password = password
         this.isAdmin = isAdmin
         this.posts = posts
-        this.likedPosts = likedPosts
+        this.comments = comments
+
     }
 }
