@@ -1,6 +1,8 @@
 package com.example.studentdorms.service.impl
 
+import com.example.studentdorms.domain.MenuCategory
 import com.example.studentdorms.domain.MenuItem
+import com.example.studentdorms.repository.MenuCategoryRepository
 import com.example.studentdorms.repository.MenuItemRepository
 import com.example.studentdorms.service.MenuItemService
 import org.springframework.stereotype.Service
@@ -9,7 +11,7 @@ import java.util.*
 
 
 @Service
-class MenuItemServiceImpl(val repository: MenuItemRepository) : MenuItemService {
+class MenuItemServiceImpl(val repository: MenuItemRepository, val categoryRepository: MenuCategoryRepository) : MenuItemService {
 
     override fun getAllMenuItems(): List<MenuItem?>? {
         return repository.findAll()
@@ -51,4 +53,5 @@ class MenuItemServiceImpl(val repository: MenuItemRepository) : MenuItemService 
     override fun getMenuItemsByStudentDorm(id: Long): List<MenuItem>? {
         return repository.findByStudentDormId(id)
     }
+
 }

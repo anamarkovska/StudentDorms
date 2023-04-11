@@ -1,5 +1,6 @@
 package com.example.studentdorms.service
 
+import com.example.studentdorms.domain.MenuCategory
 import com.example.studentdorms.domain.MenuItem
 
 interface MenuItemService {
@@ -10,4 +11,6 @@ interface MenuItemService {
     fun deleteMenuItem(id: Long?)
     fun getMenuItemsByCategory(id: Long) : List<MenuItem>?
     fun getMenuItemsByStudentDorm(id:Long):List<MenuItem>?
+
+
 }

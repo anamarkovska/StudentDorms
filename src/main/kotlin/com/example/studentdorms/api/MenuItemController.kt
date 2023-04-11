@@ -1,7 +1,12 @@
 package com.example.studentdorms.api
 
+import com.example.studentdorms.domain.MenuCategory
 import com.example.studentdorms.domain.MenuItem
+import com.example.studentdorms.domain.StudentDorm
+import com.example.studentdorms.repository.StudentDormRepository
+import com.example.studentdorms.service.MenuCategoryService
 import com.example.studentdorms.service.MenuItemService
+import com.example.studentdorms.service.StudentDormService
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import jakarta.transaction.Transactional
@@ -10,8 +15,11 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
+@CrossOrigin
 @RequestMapping("/menu")
-class MenuItemController(private val menuItemService: MenuItemService) {
+class MenuItemController(private val menuItemService: MenuItemService,
+                         private val categoryService: MenuCategoryService,
+                         private val studentDormService: StudentDormService) {
 
     @GetMapping
     fun getAllMenuItems(): ResponseEntity<List<MenuItem?>> {
@@ -51,6 +59,16 @@ class MenuItemController(private val menuItemService: MenuItemService) {
         return ResponseEntity.ok().build()
     }
 
+    @GetMapping("/category")
+    fun getAllCategories(): List<MenuCategory>? {
+        return categoryService.getAllCategories()
+    }
+
+    @GetMapping("/student-dorms")
+    fun getAllStudentDorms() : List<StudentDorm>? {
+        return studentDormService.getAllStudentDorms()
+    }
+
     @GetMapping("/category/{categoryId}")
     fun getMenuItemsByCategory(@PathVariable categoryId: Long): ResponseEntity<List<MenuItem>> {
         val menuItemsByCategory = menuItemService.getMenuItemsByCategory(categoryId)
@@ -62,5 +80,6 @@ class MenuItemController(private val menuItemService: MenuItemService) {
         val menuItemsByStudentDorm = menuItemService.getMenuItemsByStudentDorm(dormId)
         return ResponseEntity.ok(menuItemsByStudentDorm)
     }
+
 
 }
