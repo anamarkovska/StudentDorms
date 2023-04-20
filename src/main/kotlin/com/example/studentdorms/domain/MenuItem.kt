@@ -33,17 +33,22 @@ open class MenuItem {
     constructor(
         id: Long?,
         name: String,
-        category: MenuCategory?,
+        categoryId: Long?,
+        studentDormId: Long?,
         date: LocalDate,
         startTime: LocalTime,
         endTime: LocalTime
     ) {
         this.id = id
         this.name = name
-        this.category = category
+        if (categoryId != null) {
+            this.category = MenuCategory().apply { this.id = categoryId }
+        }
+        if (studentDormId != null) {
+            this.studentDorm = StudentDorm().apply { this.id = studentDormId }
+        }
         this.date = date
         this.startTime = startTime
         this.endTime = endTime
     }
 }
-

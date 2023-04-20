@@ -1,8 +1,8 @@
 package com.example.studentdorms.api
-
 import com.example.studentdorms.domain.MenuCategory
 import com.example.studentdorms.domain.MenuItem
 import com.example.studentdorms.domain.StudentDorm
+import com.example.studentdorms.domain.dto.MenuItemDTO
 import com.example.studentdorms.repository.StudentDormRepository
 import com.example.studentdorms.service.MenuCategoryService
 import com.example.studentdorms.service.MenuItemService
@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@CrossOrigin
+@CrossOrigin(origins = ["http://localhost:4200"], allowedHeaders = ["*"], allowCredentials = "true", methods = [RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE])
 @RequestMapping("/menu")
 class MenuItemController(private val menuItemService: MenuItemService,
                          private val categoryService: MenuCategoryService,
@@ -28,7 +28,7 @@ class MenuItemController(private val menuItemService: MenuItemService,
     }
 
     @PostMapping
-    fun createMenuItem(@RequestBody menuItem: MenuItem): ResponseEntity<MenuItem> {
+    fun createMenuItem(@RequestBody menuItem: MenuItemDTO): ResponseEntity<MenuItem> {
         val createdMenuItem = menuItemService.createMenuItem(menuItem)
         return ResponseEntity.ok(createdMenuItem)
     }
@@ -43,8 +43,8 @@ class MenuItemController(private val menuItemService: MenuItemService,
         }
     }
 
-    @PutMapping("/{id}")
-    fun updateMenuItem(@PathVariable id: Long, @RequestBody menuItem: MenuItem): ResponseEntity<MenuItem?> {
+    @PutMapping("/edit/{id}")
+    fun updateMenuItem(@PathVariable id: Long, @RequestBody menuItem: MenuItemDTO): ResponseEntity<MenuItem?> {
         val updatedMenuItem = menuItemService.updateMenuItem(id, menuItem)
         return if (updatedMenuItem != null) {
             ResponseEntity.ok(updatedMenuItem)
@@ -53,7 +53,7 @@ class MenuItemController(private val menuItemService: MenuItemService,
         }
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     fun deleteMenuItem(@PathVariable id: Long): ResponseEntity<Unit> {
         menuItemService.deleteMenuItem(id)
         return ResponseEntity.ok().build()
@@ -81,5 +81,10 @@ class MenuItemController(private val menuItemService: MenuItemService,
         return ResponseEntity.ok(menuItemsByStudentDorm)
     }
 
+//    @GetMapping("/student-dorms/{dormId}")
+//    fun getMenuItemsByCategoryAndStudentDorm(@PathVariable categoryId: Long, @PathVariable dormId: Long):ResponseEntity<List<MenuItem>>{
+//        val menuItemsByCategoryAndStudentDorm = menuItemService.getMenuItemsByCategoryAndStudentDorm(categoryId, dormId)
+//        return ResponseEntity.ok(menuItemsByCategoryAndStudentDorm)
+//    }
 
 }
