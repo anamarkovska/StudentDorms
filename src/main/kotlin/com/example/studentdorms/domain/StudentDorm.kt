@@ -1,5 +1,6 @@
 package com.example.studentdorms.domain
-import jakarta.persistence.*
+
+import javax.persistence.*
 
 @Entity
 @Table(name = "student_dorms")

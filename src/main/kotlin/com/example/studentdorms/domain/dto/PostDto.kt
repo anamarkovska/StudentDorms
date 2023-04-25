@@ -2,12 +2,12 @@ package com.example.studentdorms.domain.dto
 
 class PostDto {
     var id: Long? = null
-    var title: String = ""
-    var content: String = ""
-    var userDto: UserDto? = null
-    var likedBy: MutableSet<UserDto> = mutableSetOf()
-    var postCategoryDto: PostCategoryDto? = null
-    var comments: List<CommentDto> = emptyList() // Added comments field
+    private var title: String = ""
+    private var content: String = ""
+    private var userDto: UserAppDto? = null
+    private var likedBy: MutableSet<UserAppDto> = mutableSetOf()
+    private var postCategoryDto: PostCategoryDto? = null
+    private var comments: List<CommentDto> = emptyList() // Added comments field
 
     constructor()
 
@@ -15,8 +15,8 @@ class PostDto {
         id: Long?,
         title: String,
         content: String,
-        userDto: UserDto?,
-        likedBy: MutableSet<UserDto>,
+        userDto: UserAppDto?,
+        likedBy: MutableSet<UserAppDto>,
         postCategoryDto: PostCategoryDto?,
         comments: List<CommentDto> // Added comments parameter
     ) {
@@ -33,8 +33,8 @@ class PostDto {
         id: Long?,
         title: String,
         content: String,
-        userDto: UserDto?,
-        likedBy: List<UserDto>,
+        userDto: UserAppDto?,
+        likedBy: List<UserAppDto>,
         postCategoryDto: PostCategoryDto?,
         comments: List<CommentDto> // Added comments parameter
     ){

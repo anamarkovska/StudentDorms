@@ -1,14 +1,14 @@
 package com.example.studentdorms.mapper
 
 import com.example.studentdorms.domain.User
-import com.example.studentdorms.domain.dto.UserDto
+import com.example.studentdorms.domain.dto.UserAppDto
 import org.springframework.stereotype.Component
 
 
 @Component
 class UserMapper {
-    fun toDto(user: User): UserDto {
-        return UserDto(
+    fun toDto(user: User): UserAppDto {
+        return UserAppDto(
             id = user.id,
             username = user.username
         )
@@ -25,7 +25,7 @@ class UserMapper {
 //        )
 //    }
 
-    fun toDtoList(users: MutableSet<User>): List<UserDto> {
+    fun toDtoList(users: MutableSet<User>): List<UserAppDto> {
         return users.map { toDto(it) }
     }
 

@@ -1,9 +1,10 @@
 package com.example.studentdorms.domain
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import jakarta.persistence.*
 import java.time.LocalDate
 import java.time.LocalTime
+import javax.persistence.*
+
 @Entity
 @Table(name = "menu_items")
 open class MenuItem {

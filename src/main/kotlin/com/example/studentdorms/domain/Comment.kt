@@ -1,7 +1,7 @@
 package com.example.studentdorms.domain
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import jakarta.persistence.*
 import java.time.LocalDateTime
+import javax.persistence.*
 
 @Entity
 @Table(name = "comments")

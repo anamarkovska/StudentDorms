@@ -2,11 +2,11 @@ package com.example.studentdorms.domain
 
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
-import jakarta.persistence.*
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
 import java.util.*
+import javax.persistence.*
 
 @Entity
 @Table(name = "posts")

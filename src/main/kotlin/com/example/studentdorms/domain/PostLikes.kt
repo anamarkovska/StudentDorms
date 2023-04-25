@@ -1,8 +1,8 @@
 package com.example.studentdorms.domain
 
-import jakarta.persistence.*
 import lombok.NoArgsConstructor
 import java.util.*
+import javax.persistence.*
 
 @Entity
 @Table(name = "post_likes")
