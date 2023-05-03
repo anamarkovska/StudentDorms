@@ -27,7 +27,7 @@ class WebSecurityConfig(private val jwtAuthenticationEntryPoint: JwtAuthenticati
                         private val jwtUserDetailsService: UserDetailsService,
                         private val jwtRequestFilter: JwtRequestFilter,
                         private val passwordEncoder: MyPasswordEncoder
-    ) : WebSecurityConfigurerAdapter() {
+) : WebSecurityConfigurerAdapter() {
 
     @Autowired
     @Throws(Exception::class)
@@ -48,7 +48,7 @@ class WebSecurityConfig(private val jwtAuthenticationEntryPoint: JwtAuthenticati
     override fun configure(httpSecurity: HttpSecurity) {
         // We don't need CSRF for this example
         httpSecurity.cors(Customizer.withDefaults()).csrf().disable() // dont authenticate this particular request
-            .authorizeRequests().antMatchers("/authenticate")
+            .authorizeRequests().antMatchers("/api/authenticate","/api/register")
             .permitAll().anyRequest() // all other requests need to be authenticated
             .authenticated().and().exceptionHandling() // make sure we use stateless session; session won't be used to
             // store user's state.
@@ -57,7 +57,7 @@ class WebSecurityConfig(private val jwtAuthenticationEntryPoint: JwtAuthenticati
 
         // Add a filter to validate the tokens with every request
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter::class.java)
-    // allow cross-origin requests
+        // allow cross-origin requests
     }
 
     @Bean
@@ -80,4 +80,3 @@ class WebSecurityConfig(private val jwtAuthenticationEntryPoint: JwtAuthenticati
         return source
     }
 }
-

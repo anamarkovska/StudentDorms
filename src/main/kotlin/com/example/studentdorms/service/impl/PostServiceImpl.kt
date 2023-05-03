@@ -1,16 +1,23 @@
 package com.example.studentdorms.service.impl
 
 import com.example.studentdorms.domain.Post
+import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 import com.example.studentdorms.mapper.PostMapper
 import com.example.studentdorms.repository.PostRepostiroy
+import com.example.studentdorms.repository.UserRepository
+import com.example.studentdorms.service.JwtUserDetailsService
 import com.example.studentdorms.service.PostService
+import com.example.studentdorms.service.UserService
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper) : PostService{
+class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
+                      val userService: JwtUserDetailsService, private val userRepository: UserRepository
+) : PostService{
     override fun getAllPosts(): List<PostDto> {
         val posts = repostiroy.findAll()
         val postsDto = mapper.toDtoList(posts)
@@ -34,7 +41,9 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper) : 
     }
 
     override fun createPost(postCreationDto: PostCreationDto) {
-        val post = Post(postCreationDto)
+        val userDetails: UserDetails = userService.findAuthenticatedUser();
+        val user: User = userRepository.findByUsername(userDetails.username)
+        val post = Post(postCreationDto, user)
         repostiroy.save(post)
     }
 

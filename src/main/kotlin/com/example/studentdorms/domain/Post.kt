@@ -64,11 +64,11 @@ open class Post {
         this.postCategory = postCategory
     }
 
-    constructor(postCreationDto: PostCreationDto) {  //da se dodajt userot
+    constructor(postCreationDto: PostCreationDto, user: User) {
         this.id = id
         this.title = postCreationDto.title
         this.content = postCreationDto.content
-//        this.user = user
+        this.user = user
         this.comments = comments
         this.likedBy = likedBy
         this.createdAt = createdAt

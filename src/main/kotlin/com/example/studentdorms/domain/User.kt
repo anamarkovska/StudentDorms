@@ -13,6 +13,7 @@ open class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
+    @Column(unique = true)
     var username: String = ""
 
     var password: String = ""

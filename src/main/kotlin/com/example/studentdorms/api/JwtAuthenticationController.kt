@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 @CrossOrigin
-@RequestMapping
+@RequestMapping("/api")
 class JwtAuthenticationController(private val authenticationManager: MyAuthenticationManager,
                                   private val jwtTokenUtil: JwtTokenUtil) {
 
@@ -35,12 +35,17 @@ class JwtAuthenticationController(private val authenticationManager: MyAuthentic
     }
 
     @RequestMapping(value = ["/register"], method = [RequestMethod.POST])
-    @Throws(java.lang.Exception::class)
-    fun saveUser(@RequestBody user: UserDto): ResponseEntity<*>? {
-        return ResponseEntity.ok(userDetailsService!!.save(user))
+    fun saveUser(@RequestBody user: UserDto): ResponseEntity<*> {
+        try {
+            val savedUser = userDetailsService!!.save(user)
+            return ResponseEntity.ok(savedUser)
+        } catch (e: Exception) {
+            return ResponseEntity.badRequest().body("Error: ${e.message}")
+        }
     }
 
-        @Throws(Exception::class)
+
+    @Throws(Exception::class)
     private fun authenticate(username: String, password: String) {
         try {
             authenticationManager!!.authenticate(UsernamePasswordAuthenticationToken(username, password))
