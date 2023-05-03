@@ -1,10 +1,12 @@
 package com.example.studentdorms.service.impl
 
 import com.example.studentdorms.domain.Post
+import com.example.studentdorms.domain.PostCategory
 import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 import com.example.studentdorms.mapper.PostMapper
+import com.example.studentdorms.repository.PostCategoryRepository
 import com.example.studentdorms.repository.PostRepostiroy
 import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.JwtUserDetailsService
@@ -16,6 +18,7 @@ import java.util.*
 
 @Service
 class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
+                      val postCategoryRepository: PostCategoryRepository,
                       val userService: JwtUserDetailsService, private val userRepository: UserRepository
 ) : PostService{
     override fun getAllPosts(): List<PostDto> {
@@ -40,11 +43,14 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         return postsDto
     }
 
-    override fun createPost(postCreationDto: PostCreationDto) {
+    override fun createPost(postCreationDto: PostCreationDto, postCategory: Long) {
         val userDetails: UserDetails = userService.findAuthenticatedUser();
         val user: User = userRepository.findByUsername(userDetails.username)
-        val post = Post(postCreationDto, user)
-        repostiroy.save(post)
+        val category: PostCategory? = postCategoryRepository.findById(postCategory).orElse(null)
+        category?.let {
+            val post = Post(postCreationDto, it, user)
+            repostiroy.save(post)
+        }
     }
 
     override fun like(postId: Long?) {

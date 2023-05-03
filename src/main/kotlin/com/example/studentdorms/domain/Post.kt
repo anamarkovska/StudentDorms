@@ -64,7 +64,7 @@ open class Post {
         this.postCategory = postCategory
     }
 
-    constructor(postCreationDto: PostCreationDto, user: User) {
+    constructor(postCreationDto: PostCreationDto,postCategory: PostCategory, user: User) {
         this.id = id
         this.title = postCreationDto.title
         this.content = postCreationDto.content
