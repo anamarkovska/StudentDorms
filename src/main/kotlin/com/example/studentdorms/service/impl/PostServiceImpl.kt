@@ -40,10 +40,11 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         return postsDto
     }
 
-    override fun createPost(postCreationDto: PostCreationDto) {
+    override fun createPost(postCreationDto: PostCreationDto, postCategory: Long) {
         val userDetails: UserDetails = userService.findAuthenticatedUser();
         val user: User = userRepository.findByUsername(userDetails.username)
-        val post = Post(postCreationDto, user)
+        val category = repostiroy.findCategoryById(postCategory)
+        val post = Post(postCreationDto,category, user)
         repostiroy.save(post)
     }
 

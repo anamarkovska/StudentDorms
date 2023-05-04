@@ -1,6 +1,7 @@
 package com.example.studentdorms.repository
 
 import com.example.studentdorms.domain.Post
+import com.example.studentdorms.domain.PostCategory
 import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.PostDto
 import org.springframework.data.jpa.repository.JpaRepository
@@ -12,4 +13,5 @@ interface PostRepostiroy:JpaRepository<Post,Long> {
 //override fun findAll(): MutableList<Post>
 
     fun findByPostCategoryId(categoryId: Long): List<Post>
+    fun findCategoryById(categoryId: Long): PostCategory
 }
