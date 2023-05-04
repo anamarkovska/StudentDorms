@@ -29,10 +29,10 @@ class PostController(private val postService: PostService) {
         return ResponseEntity.ok(postsByCategory)
     }
 
-    @PostMapping
-    fun createPost(@RequestBody postCreationDto: PostCreationDto?): ResponseEntity<*> {
+    @PostMapping("/{categoryId}")
+    fun createPost(@RequestBody postCreationDto: PostCreationDto?, @PathVariable categoryId: Long): ResponseEntity<*> {
         if (postCreationDto != null) {
-            val createdPost = postService.createPost(postCreationDto)
+            val createdPost = postService.createPost(postCreationDto, categoryId)
             return ResponseEntity.status(HttpStatus.CREATED).body(createdPost)
         }
         return ResponseEntity.badRequest().build<String>()
