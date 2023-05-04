@@ -40,7 +40,7 @@ class PostController(private val postService: PostService) {
 
     @PutMapping("/{postId}/like")
     fun likePost(@PathVariable postId: Long?): ResponseEntity<*>? {
-        postService.like(postId)
+        postId?.let { postService.like(it) }
         return ResponseEntity.ok().build<Any>()
     }
 

@@ -10,15 +10,16 @@ import com.example.studentdorms.repository.PostCategoryRepository
 import com.example.studentdorms.repository.PostRepostiroy
 import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.JwtUserDetailsService
+import com.example.studentdorms.service.PostLikesService
 import com.example.studentdorms.service.PostService
-import com.example.studentdorms.service.UserService
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
-import java.util.*
+
 
 @Service
 class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
                       val postCategoryRepository: PostCategoryRepository,
+                      val postLikesService: PostLikesService,
                       val userService: JwtUserDetailsService, private val userRepository: UserRepository
 ) : PostService{
     override fun getAllPosts(): List<PostDto> {
@@ -53,10 +54,14 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         }
     }
 
-    override fun like(postId: Long?) {
-        val post = postId?.let { repostiroy.getById(it) }
-//        val user = userService.findAuthenticatedUser();
-//        postLikesService.toggleLike(post,user)
+    override fun like(id: Long) {
+        val post = repostiroy.findById(id)
+        val userDetails = userService.findAuthenticatedUser()
+        val username = userDetails.username
+        val user = userRepository.findByUsername(username)
+        println(user)
+        println(post)
+        postLikesService.toggleLike(post, user)
     }
 
     override fun delete(postId: Long?) {

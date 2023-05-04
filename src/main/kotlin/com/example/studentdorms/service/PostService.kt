@@ -14,6 +14,6 @@ interface PostService {
     fun getPostsByCategory(categoryId: Long?): List<PostDto>?
 
     fun createPost(postCreationDto: PostCreationDto, postCategory: Long)
-    fun like(postId: Long?)
+    fun like(postId: Long)
     fun delete(postId:Long?)
 }

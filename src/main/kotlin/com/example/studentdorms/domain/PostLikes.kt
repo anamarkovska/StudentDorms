@@ -1,7 +1,6 @@
 package com.example.studentdorms.domain
 
 import javax.persistence.*
-import lombok.NoArgsConstructor
 import java.util.*
 
 @Entity
@@ -24,5 +23,9 @@ open class PostLikes {
     constructor(user: User, post: Post){
         this.user=user
         this.post=post
+    }
+    constructor(post: Post, user: User?){
+        this.post=post
+        this.user=user
     }
 }

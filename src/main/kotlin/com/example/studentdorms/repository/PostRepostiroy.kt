@@ -14,4 +14,5 @@ interface PostRepostiroy:JpaRepository<Post,Long> {
 
     fun findByPostCategoryId(categoryId: Long): List<Post>
     fun findCategoryById(categoryId: Long) : PostCategory
+
 }
