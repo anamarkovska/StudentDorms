@@ -6,5 +6,5 @@ import java.util.*
 
 
 interface PostLikesService {
-    fun toggleLike(post: Post, user: User?)
+//    fun toggleLike(post: Post, user: User?)
 }

@@ -60,9 +60,10 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
 
     override fun createLike(postId: Long, user: User) {
         val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
-        val postLike = PostLikes(post, user)
+        val postLike = PostLikes(user,post)
         postLikesRepository.save(postLike)
     }
+
 
     override fun delete(postId: Long?) {
         postId?.let { repostiroy.deleteById(it) }

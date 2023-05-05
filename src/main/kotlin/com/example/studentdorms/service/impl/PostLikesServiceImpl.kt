@@ -10,13 +10,13 @@ import java.util.*
 
 @Service
 class PostLikesServiceImpl(val repository: PostLikesRepository) : PostLikesService {
-    override fun toggleLike(post: Post, user: User?) {
-        val postLike: PostLikes? = repository.findPostLikeByPostAndUser(post, user)
-        if (postLike != null) {
-            repository.delete(postLike)
-        } else {
-            val userLikesPost = PostLikes(post, user)
-            repository.save(userLikesPost)
-        }
-    }
+//    override fun toggleLike(post: Post, user: User?) {
+//        val postLike: PostLikes? = repository.findPostLikeByPostAndUser(post, user)
+//        if (postLike != null) {
+//            repository.delete(postLike)
+//        } else {
+//            val userLikesPost = PostLikes(user,post)
+//            repository.save(userLikesPost)
+//        }
+//    }
 }
