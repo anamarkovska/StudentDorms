@@ -2,17 +2,20 @@ package com.example.studentdorms.service.impl
 
 import com.example.studentdorms.domain.Post
 import com.example.studentdorms.domain.PostCategory
+import com.example.studentdorms.domain.PostLikes
 import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 import com.example.studentdorms.mapper.PostMapper
 import com.example.studentdorms.repository.PostCategoryRepository
+import com.example.studentdorms.repository.PostLikesRepository
 import com.example.studentdorms.repository.PostRepostiroy
 import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.JwtUserDetailsService
 import com.example.studentdorms.service.PostLikesService
 import com.example.studentdorms.service.PostService
 import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
 
 
@@ -20,6 +23,7 @@ import org.springframework.stereotype.Service
 class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
                       val postCategoryRepository: PostCategoryRepository,
                       val postLikesService: PostLikesService,
+                      val postLikesRepository: PostLikesRepository,
                       val userService: JwtUserDetailsService, private val userRepository: UserRepository
 ) : PostService{
     override fun getAllPosts(): List<PostDto> {
@@ -54,14 +58,10 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         }
     }
 
-    override fun like(id: Long) {
-        val post = repostiroy.findById(id)
-        val userDetails = userService.findAuthenticatedUser()
-        val username = userDetails.username
-        val user = userRepository.findByUsername(username)
-        println(user)
-        println(post)
-        postLikesService.toggleLike(post, user)
+    override fun createLike(postId: Long, user: User) {
+        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        val postLike = PostLikes(post, user)
+        postLikesRepository.save(postLike)
     }
 
     override fun delete(postId: Long?) {

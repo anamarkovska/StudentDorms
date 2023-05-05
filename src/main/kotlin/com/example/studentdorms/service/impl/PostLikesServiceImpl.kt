@@ -10,13 +10,12 @@ import java.util.*
 
 @Service
 class PostLikesServiceImpl(val repository: PostLikesRepository) : PostLikesService {
-    override fun toggleLike(post: Optional<Post>, user: User?) {
-        val p = post.orElseThrow { IllegalArgumentException("Post not found") }
-        val postLike: PostLikes? = repository.findPostLikeByPostAndUser(p, user)
+    override fun toggleLike(post: Post, user: User?) {
+        val postLike: PostLikes? = repository.findPostLikeByPostAndUser(post, user)
         if (postLike != null) {
             repository.delete(postLike)
         } else {
-            val userLikesPost = PostLikes(p, user)
+            val userLikesPost = PostLikes(post, user)
             repository.save(userLikesPost)
         }
     }

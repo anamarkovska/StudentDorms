@@ -11,6 +11,7 @@ class CommentMapper(private val userMapper: UserMapper) {
         return CommentDto(
             id = comment.id,
             content = comment.content,
+            postId= comment.post?.id,
             userDto = comment.user?.let { userMapper.toDto(it) }
         )
     }

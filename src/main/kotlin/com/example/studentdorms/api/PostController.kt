@@ -2,6 +2,8 @@ package com.example.studentdorms.api
 
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
+import com.example.studentdorms.repository.UserRepository
+import com.example.studentdorms.service.JwtUserDetailsService
 import com.example.studentdorms.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -10,7 +12,7 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @CrossOrigin
 @RequestMapping("/api/posts")
-class PostController(private val postService: PostService) {
+class PostController(private val postService: PostService,private val userService: JwtUserDetailsService, private val userRepository: UserRepository) {
 
     @GetMapping
     fun getAllPosts(): ResponseEntity<List<PostDto?>> {
@@ -38,9 +40,18 @@ class PostController(private val postService: PostService) {
         return ResponseEntity.badRequest().build<String>()
     }
 
-    @PutMapping("/{postId}/like")
-    fun likePost(@PathVariable postId: Long?): ResponseEntity<*>? {
-        postId?.let { postService.like(it) }
+//    @PutMapping("/{postId}/like")
+//    fun likePost(@PathVariable postId: Long?): ResponseEntity<*>? {
+//        postId?.let { postService.like(it) }
+//        return ResponseEntity.ok().build<Any>()
+//    }
+
+    @PostMapping("/{postId}/like")
+    fun likePost(@PathVariable postId: Long?): ResponseEntity<*> {
+        val userDetails = userService.findAuthenticatedUser()
+        val username = userDetails.username
+        val user = userRepository.findByUsername(username)
+        postId?.let { postService.createLike(it, user) }
         return ResponseEntity.ok().build<Any>()
     }
 

@@ -1,6 +1,7 @@
 package com.example.studentdorms.service
 
 import com.example.studentdorms.domain.Post
+import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 
@@ -14,6 +15,6 @@ interface PostService {
     fun getPostsByCategory(categoryId: Long?): List<PostDto>?
 
     fun createPost(postCreationDto: PostCreationDto, postCategory: Long)
-    fun like(postId: Long)
+    fun createLike(postId: Long, user: User)
     fun delete(postId:Long?)
 }

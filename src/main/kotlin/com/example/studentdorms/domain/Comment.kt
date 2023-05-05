@@ -1,4 +1,6 @@
 package com.example.studentdorms.domain
+import com.example.studentdorms.domain.dto.CommentDto
+import com.example.studentdorms.domain.dto.PostCreationDto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import javax.persistence.*
 import java.time.LocalDateTime
@@ -32,5 +34,11 @@ open class Comment {
         this.user = user
         this.post = post
         this.createdAt = createdAt
+    }
+    constructor(commentDTO: CommentDto, post: Post, user: User) {
+        this.id = id
+        this.content = commentDTO.content
+        this.user = user
+        this.post = post
     }
 }

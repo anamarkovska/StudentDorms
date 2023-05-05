@@ -8,6 +8,7 @@ import java.util.*
 open class PostLikes {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     @field:JoinColumn(name = "post_id")
