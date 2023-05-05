@@ -1,9 +1,6 @@
 package com.example.studentdorms.service.impl
 
-import com.example.studentdorms.domain.Post
-import com.example.studentdorms.domain.PostCategory
-import com.example.studentdorms.domain.PostLikes
-import com.example.studentdorms.domain.User
+import com.example.studentdorms.domain.*
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 import com.example.studentdorms.mapper.PostMapper
@@ -58,15 +55,31 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         }
     }
 
+//    override fun createLike(postId: Long, user: User) {
+//        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+//        val postLike = PostLikes(user,post)
+//        postLikesRepository.save(postLike)
+//    }
+
     override fun createLike(postId: Long, user: User) {
         val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
-        val postLike = PostLikes(user,post)
+        val postLikesId = PostLikesId(post.id!!, user.id!!)
+        val postLike = PostLikes(postLikesId, post, user)
         postLikesRepository.save(postLike)
     }
 
-
     override fun delete(postId: Long?) {
         postId?.let { repostiroy.deleteById(it) }
+    }
+
+    override fun getNumberOfLikes(postId: Long): Long {
+        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        return post.likedBy.size.toLong()
+    }
+
+    override fun getUsernamesFromPostLikes(postId: Long): List<String> {
+        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        return post.likedBy.map { user -> user.username }
     }
 
 

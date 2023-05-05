@@ -1,32 +1,29 @@
 package com.example.studentdorms.domain
 
+import java.io.Serializable
 import javax.persistence.*
 import java.util.*
 
 @Entity
 @Table(name = "post_likes")
-open class PostLikes {
+class PostLikes(
+    @EmbeddedId
+    var id: PostLikesId = PostLikesId(),
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("postId")
+    var post: Post? = null,
 
-    @field:JoinColumn(name = "post_id")
-    @field:ManyToOne
-    var post: Post? = null
-
-    @field:JoinColumn(name = "user_id")
-    @field:ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("userId")
     var user: User? = null
+)
 
-    constructor()
+@Embeddable
+class PostLikesId(
+    @Column(name = "post_id")
+    var postId: Long? = null,
 
-    constructor(user: User, post: Post){
-        this.user=user
-        this.post=post
-    }
-    constructor(post: Post, user: User?){
-        this.post=post
-        this.user=user
-    }
-}
+    @Column(name = "user_id")
+    var userId: Long? = null
+) : Serializable

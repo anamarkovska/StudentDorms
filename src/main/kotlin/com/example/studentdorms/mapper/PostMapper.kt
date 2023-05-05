@@ -14,7 +14,7 @@ class PostMapper(private val userMapper: UserMapper, private val commentMapper: 
             title = post.title,
             content = post.content,
             userDto = post.user?.let { userMapper.toDto(it) },
-//            likedBy = userMapper.toDtoList(post.likedBy),
+            likedBy = userMapper.toDtoList(post.likedBy),
             postCategoryDto = post.postCategory?.let { postCategoryMapper.toDto(it) },
             comments = commentMapper.toDtoList(post.comments)
         )

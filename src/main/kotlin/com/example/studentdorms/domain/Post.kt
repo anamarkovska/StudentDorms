@@ -27,14 +27,15 @@ open class Post {
     @OneToMany(mappedBy = "post", cascade = [CascadeType.ALL], targetEntity = Comment::class)
     var comments: List<Comment> = emptyList()
 
-//    @ManyToMany
-//    @JoinTable(
-//        name = "post_likes",
-//        joinColumns = arrayOf(JoinColumn(name = "post_id")),
-//        inverseJoinColumns = arrayOf(JoinColumn(name = "user_id"))
-//    )
+    @ManyToMany
+    @JoinTable(
+        name = "post_likes",
+        joinColumns = arrayOf(JoinColumn(name = "post_id")),
+        inverseJoinColumns = arrayOf(JoinColumn(name = "user_id"))
+    )
+    var likedBy: MutableSet<User> = mutableSetOf()
 //    @OneToMany(mappedBy = "post", cascade = [CascadeType.ALL], targetEntity = PostLikes::class)
-//    var likedBy: MutableSet<User> = mutableSetOf()
+
 
     var createdAt: LocalDateTime = LocalDateTime.now()
 
@@ -60,7 +61,7 @@ open class Post {
         this.content = content
         this.user = user
         this.comments = comments
-//        this.likedBy = likedBy
+        this.likedBy = likedBy
         this.createdAt = createdAt
         this.postCategory = postCategory
     }
@@ -71,7 +72,7 @@ open class Post {
         this.content = postCreationDto.content
         this.user = user
         this.comments = comments
-//        this.likedBy = likedBy
+        this.likedBy = likedBy
         this.createdAt = createdAt
         this.postCategory = postCategory
     }
