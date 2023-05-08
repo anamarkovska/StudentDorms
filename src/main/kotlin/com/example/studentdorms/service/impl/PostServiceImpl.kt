@@ -82,5 +82,14 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         return post.likedBy.map { user -> user.username }
     }
 
+    override fun deleteLike(postId: Long, username: String) {
+        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        val user = post.likedBy.find { it.username == username }
+        if (user != null) {
+            post.likedBy.remove(user)
+            repostiroy.save(post)
+        }
+    }
+
 
 }

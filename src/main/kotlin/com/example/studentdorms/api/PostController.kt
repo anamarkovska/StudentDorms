@@ -60,7 +60,20 @@ class PostController(private val postService: PostService,private val userServic
         postService.delete(postId)
         return ResponseEntity.ok().build<Any>()
     }
+    @GetMapping("/{postId}/likes")
+    fun getNumberOfLikes(@PathVariable postId: Long): Long {
+        return postService.getNumberOfLikes(postId)
+    }
 
+    @GetMapping("/{postId}/likes/usernames")
+    fun getUsernamesFromPostLikes(@PathVariable postId: Long): List<String> {
+        return postService.getUsernamesFromPostLikes(postId)
+    }
+
+    @DeleteMapping("/posts/{postId}/likes/{username}")
+    fun deleteLike(@PathVariable postId: Long, @PathVariable username: String) {
+        postService.deleteLike(postId, username)
+    }
 
 
 }
