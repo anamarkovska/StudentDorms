@@ -19,5 +19,5 @@ interface PostService {
     fun delete(postId:Long?)
     fun getNumberOfLikes(postId: Long): Long
     fun getUsernamesFromPostLikes(postId: Long): List<String>
-    fun deleteLike(postId: Long, username: String)
+     fun deleteLike(postId: Long)
 }
