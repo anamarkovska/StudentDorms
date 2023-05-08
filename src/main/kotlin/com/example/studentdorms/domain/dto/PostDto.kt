@@ -5,7 +5,7 @@ class PostDto {
     var title: String = ""
     var content: String = ""
     var userDto: UserDto? = null
-//    var likedBy: MutableSet<UserDto> = mutableSetOf()
+    var likedBy: MutableSet<UserDto> = mutableSetOf()
     var postCategoryDto: PostCategoryDto? = null
     var comments: List<CommentDto> = emptyList() // Added comments field
 
@@ -34,7 +34,7 @@ class PostDto {
         title: String,
         content: String,
         userDto: UserDto?,
-//        likedBy: List<UserDto>,
+        likedBy: List<UserDto>,
         postCategoryDto: PostCategoryDto?,
         comments: List<CommentDto> // Added comments parameter
     ){
@@ -42,7 +42,7 @@ class PostDto {
         this.title = title
         this.content = content
         this.userDto = userDto
-//        this.likedBy.addAll(likedBy)
+        this.likedBy.addAll(likedBy)
         this.postCategoryDto = postCategoryDto
         this.comments = comments // Set comments field
     }

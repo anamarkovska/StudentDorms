@@ -17,4 +17,6 @@ interface PostService {
     fun createPost(postCreationDto: PostCreationDto, postCategory: Long)
     fun createLike(postId: Long, user: User)
     fun delete(postId:Long?)
+    fun getNumberOfLikes(postId: Long): Long
+    fun getUsernamesFromPostLikes(postId: Long): List<String>
 }
