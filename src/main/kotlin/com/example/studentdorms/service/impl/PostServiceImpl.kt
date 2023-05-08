@@ -83,9 +83,12 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
     }
 
     override fun deleteLike(postId: Long, username: String) {
+        println("deleteLike is invoked")
         val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
-        val user = post.likedBy.find { it.username == username }
+        println(username)
+        val user = post.likedBy.find { it.username == username}
         if (user != null) {
+            println("user is not null")
             post.likedBy.remove(user)
             repostiroy.save(post)
         }

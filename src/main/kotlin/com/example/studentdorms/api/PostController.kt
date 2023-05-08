@@ -70,7 +70,7 @@ class PostController(private val postService: PostService,private val userServic
         return postService.getUsernamesFromPostLikes(postId)
     }
 
-    @DeleteMapping("/posts/{postId}/likes/{username}")
+    @DeleteMapping("/{postId}/likes/{username}")
     fun deleteLike(@PathVariable postId: Long, @PathVariable username: String) {
         postService.deleteLike(postId, username)
     }
