@@ -13,4 +13,9 @@ open class UserDto {
         this.username = username
         this.password = password
     }
+
+    constructor(username: String, password: String) {
+        this.username = username
+        this.password = password
+    }
 }

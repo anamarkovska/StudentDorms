@@ -3,6 +3,7 @@ package com.example.studentdorms.service.impl
 import com.example.studentdorms.domain.*
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
+import com.example.studentdorms.domain.dto.UserDto
 import com.example.studentdorms.mapper.PostMapper
 import com.example.studentdorms.repository.PostCategoryRepository
 import com.example.studentdorms.repository.PostLikesRepository
@@ -11,6 +12,7 @@ import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.JwtUserDetailsService
 import com.example.studentdorms.service.PostLikesService
 import com.example.studentdorms.service.PostService
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
@@ -95,6 +97,16 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         }
     }
 
+    override fun getAuthenticatedUser(): UserDto? {
+        val auth = SecurityContextHolder.getContext().authentication
+        if (auth != null && auth.isAuthenticated) {
+            val username = auth.name
+            val userDetails = userService.loadUserByUsername(username)
+            return UserDto(userDetails.username, userDetails.password)
+        } else {
+            return null
+        }
+    }
 
 
 }

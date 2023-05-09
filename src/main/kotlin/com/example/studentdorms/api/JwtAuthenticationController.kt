@@ -6,7 +6,9 @@ import com.example.studentdorms.domain.Security.JwtRequest
 import com.example.studentdorms.domain.Security.JwtResponse
 import com.example.studentdorms.domain.dto.UserDto
 import com.example.studentdorms.service.JwtUserDetailsService
+import com.example.studentdorms.service.PostService
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
@@ -18,7 +20,8 @@ import org.springframework.web.bind.annotation.*
 @CrossOrigin
 @RequestMapping("/api")
 class JwtAuthenticationController(private val authenticationManager: MyAuthenticationManager,
-                                  private val jwtTokenUtil: JwtTokenUtil) {
+                                  private val jwtTokenUtil: JwtTokenUtil,
+private val postService: PostService) {
 
     @Autowired
     private val userDetailsService: JwtUserDetailsService? = null
@@ -55,4 +58,15 @@ class JwtAuthenticationController(private val authenticationManager: MyAuthentic
             throw Exception("INVALID_CREDENTIALS", e)
         }
     }
+
+    @GetMapping("/authenticated-user")
+    fun getAuthenticatedUser(): ResponseEntity<UserDto> {
+        val user = postService.getAuthenticatedUser()
+        return if (user != null) {
+            ResponseEntity.ok(user)
+        } else {
+            ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        }
+    }
+
 }

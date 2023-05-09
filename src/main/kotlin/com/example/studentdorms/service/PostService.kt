@@ -4,6 +4,7 @@ import com.example.studentdorms.domain.Post
 import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
+import com.example.studentdorms.domain.dto.UserDto
 
 interface PostService {
 
@@ -19,5 +20,6 @@ interface PostService {
     fun delete(postId:Long?)
     fun getNumberOfLikes(postId: Long): Long
     fun getUsernamesFromPostLikes(postId: Long): List<String>
-     fun deleteLike(postId: Long)
+    fun deleteLike(postId: Long)
+    fun getAuthenticatedUser(): UserDto?
 }
