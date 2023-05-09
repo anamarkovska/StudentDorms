@@ -51,22 +51,6 @@ override fun createMenuItem(menuItemDto: MenuItemDTO): MenuItem {
 
     return repository.save(menuItem)
 }
-//    override fun updateMenuItem(id: Long?, menuItem: MenuItem?): MenuItem? {
-//        val existingMenuItem = id?.let { repository.findById(it).orElse(null) }
-//
-//        existingMenuItem?.apply {
-//            if (menuItem != null) {
-//                name = menuItem.name
-//                startTime = menuItem.startTime
-//                endTime = menuItem.endTime
-//                category = menuItem.category
-//                date = menuItem.date
-//                studentDorm = menuItem.studentDorm
-//            }
-//        }
-//
-//        return existingMenuItem?.let { repository.save(it) }
-//    }
 
     override fun updateMenuItem(id: Long?, menuItemDTO: MenuItemDTO?): MenuItem? {
         val existingMenuItem = id?.let { repository.findById(it).orElse(null) }

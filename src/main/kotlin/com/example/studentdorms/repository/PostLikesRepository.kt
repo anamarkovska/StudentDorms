@@ -11,4 +11,6 @@ import org.springframework.stereotype.Repository
 interface PostLikesRepository : JpaRepository<PostLikes, Long> {
     fun countPostLikeByPost(post: Post?): Int?
     fun findPostLikeByPostAndUser(post: Post?, user: User?): PostLikes
+
+    fun existsByPostIdAndUserId(postId: Long, userId: Long?): Boolean
 }

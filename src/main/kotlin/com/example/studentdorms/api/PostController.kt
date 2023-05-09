@@ -4,6 +4,7 @@ import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.JwtUserDetailsService
+import com.example.studentdorms.service.PostLikesService
 import com.example.studentdorms.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -12,7 +13,10 @@ import org.springframework.web.bind.annotation.*
 @RestController
 @CrossOrigin
 @RequestMapping("/api/posts")
-class PostController(private val postService: PostService,private val userService: JwtUserDetailsService, private val userRepository: UserRepository) {
+class PostController(private val postService: PostService,
+                     private val userService: JwtUserDetailsService,
+                     private val userRepository: UserRepository,
+                     private val postLikesService: PostLikesService) {
 
     @GetMapping
     fun getAllPosts(): ResponseEntity<List<PostDto?>> {
@@ -75,5 +79,9 @@ class PostController(private val postService: PostService,private val userServic
         postService.deleteLike(postId)
     }
 
-
+    @GetMapping("/{postId}/hasLiked")
+    fun hasLikedPost(@PathVariable postId: Long): ResponseEntity<Boolean> {
+        val hasLiked = postLikesService.hasLikedPost(postId)
+        return ResponseEntity.ok(hasLiked)
+    }
 }
