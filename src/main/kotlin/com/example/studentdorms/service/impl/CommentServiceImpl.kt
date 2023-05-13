@@ -2,7 +2,6 @@ package com.example.studentdorms.service.impl
 
 import com.example.studentdorms.domain.Comment
 import com.example.studentdorms.domain.Post
-import com.example.studentdorms.domain.PostCategory
 import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.CommentDto
 import com.example.studentdorms.mapper.CommentMapper
@@ -12,6 +11,7 @@ import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.CommentService
 import com.example.studentdorms.service.JwtUserDetailsService
 import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties.Jwt
+import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
 import javax.persistence.EntityNotFoundException
@@ -47,9 +47,16 @@ class CommentServiceImpl(
         }
     }
 
-        override fun getCommentsByPostId(postId: Long): List<CommentDto> {
+    override fun getCommentById(commentId: Long): CommentDto {
+        val comment = commentRepository.findById(commentId)
+            .orElseThrow { ChangeSetPersister.NotFoundException() }
+        return commentMapper.toDto(comment)
+    }
+
+    override fun getCommentsByPostId(postId: Long): List<CommentDto> {
             val comments = commentRepository.findByPostId(postId)
             return commentMapper.toDtoList(comments)
+
         }
     }
 

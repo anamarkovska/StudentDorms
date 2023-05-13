@@ -8,5 +8,7 @@ interface CommentService {
     fun createComment(commentDto: CommentDto, postId: Long)
     fun getCommentsByPostId(postId: Long): List<CommentDto>
     fun deleteComment(commentId: Long)
+
+    fun getCommentById(commentId: Long): CommentDto
 }
 

@@ -3,6 +3,7 @@ package com.example.studentdorms.mapper
 import com.example.studentdorms.domain.Comment
 import com.example.studentdorms.domain.dto.CommentDto
 import org.springframework.stereotype.Component
+import java.util.*
 
 @Component
 class CommentMapper(private val userMapper: UserMapper) {

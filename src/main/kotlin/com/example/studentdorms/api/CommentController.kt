@@ -4,6 +4,7 @@ import com.example.studentdorms.service.CommentService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @RestController
 @RequestMapping("/api/comments")
@@ -27,7 +28,13 @@ class CommentController(
         }
     }
     @DeleteMapping("/delete/{id}")
-    fun deleteComment(@PathVariable id: Long) {
-        commentService.deleteComment(id)
+    fun deleteComment(@PathVariable id: Long, principal: Principal): ResponseEntity<Any> {
+        val comment = commentService.getCommentById(id)
+        if (comment.userDto?.username == principal.name) {
+            commentService.deleteComment(id)
+            return ResponseEntity.ok().build()
+        } else {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
+        }
     }
 }
