@@ -13,7 +13,8 @@ class CommentMapper(private val userMapper: UserMapper) {
             id = comment.id,
             content = comment.content,
             postId= comment.post?.id,
-            userDto = comment.user?.let { userMapper.toDto(it) }
+            userDto = comment.user?.let { userMapper.toDto(it) },
+            createdAt = comment.createdAt
         )
     }
 
