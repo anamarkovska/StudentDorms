@@ -1,6 +1,8 @@
 package com.example.studentdorms.api
 import com.example.studentdorms.domain.dto.CommentDto
 import com.example.studentdorms.service.CommentService
+import com.example.studentdorms.service.JwtUserDetailsService
+import com.example.studentdorms.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -9,7 +11,9 @@ import java.security.Principal
 @RestController
 @RequestMapping("/api/comments")
 class CommentController(
-    private val commentService: CommentService
+    private val commentService: CommentService,
+    private val userService: JwtUserDetailsService,
+    private val postService: PostService
 ) {
 
     @GetMapping("/{postId}")
@@ -30,7 +34,10 @@ class CommentController(
     @DeleteMapping("/delete/{id}")
     fun deleteComment(@PathVariable id: Long, principal: Principal): ResponseEntity<Any> {
         val comment = commentService.getCommentById(id)
-        if (comment.userDto?.username == principal.name) {
+        val currentUser = userService.loadUserByUsername(principal.name)
+        val post = postService.getPostById(comment.postId)
+
+        if (currentUser?.username == principal.name || post?.userDto?.username == principal.name) {
             commentService.deleteComment(id)
             return ResponseEntity.ok().build()
         } else {
