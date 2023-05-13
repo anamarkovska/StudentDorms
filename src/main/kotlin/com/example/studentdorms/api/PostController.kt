@@ -9,6 +9,7 @@ import com.example.studentdorms.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import java.security.Principal
 
 @RestController
 @CrossOrigin
@@ -60,10 +61,16 @@ class PostController(private val postService: PostService,
     }
 
     @DeleteMapping("/{postId}/delete")
-    fun deletePost(@PathVariable postId: Long?):ResponseEntity<*>?{
-        postService.delete(postId)
-        return ResponseEntity.ok().build<Any>()
+    fun deletePost(@PathVariable postId: Long?, principal: Principal): ResponseEntity<*>? {
+        val post = postService.getPostById(postId)
+        if (post?.userDto?.username == principal.name) {
+            postService.delete(postId)
+            return ResponseEntity.ok().build<Any>()
+        } else {
+            return ResponseEntity<Any>(HttpStatus.FORBIDDEN)
+        }
     }
+
     @GetMapping("/{postId}/likes")
     fun getNumberOfLikes(@PathVariable postId: Long): Long {
         return postService.getNumberOfLikes(postId)

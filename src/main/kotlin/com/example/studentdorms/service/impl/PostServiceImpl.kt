@@ -102,11 +102,13 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         if (auth != null && auth.isAuthenticated) {
             val username = auth.name
             val userDetails = userService.loadUserByUsername(username)
-            return UserDto(userDetails.username, userDetails.password)
+            val user = userRepository.findByUsername(username)
+            return UserDto(user.id, userDetails.username, userDetails.password)
         } else {
             return null
         }
     }
+
 
 
 }
