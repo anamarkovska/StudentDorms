@@ -2,6 +2,8 @@ package com.example.studentdorms.api
 
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
+import com.example.studentdorms.exceptions.PostNotFoundException
+import com.example.studentdorms.exceptions.UnauthorizedUserException
 import com.example.studentdorms.repository.UserRepository
 import com.example.studentdorms.service.JwtUserDetailsService
 import com.example.studentdorms.service.PostLikesService
@@ -9,6 +11,7 @@ import com.example.studentdorms.service.PostService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.server.ResponseStatusException
 import java.security.Principal
 
 @RestController
@@ -35,6 +38,23 @@ class PostController(private val postService: PostService,
         val postsByCategory = postService.getPostsByCategory(categoryId)
         return ResponseEntity.ok(postsByCategory)
     }
+    @PutMapping("/update")
+    fun updatePost(
+        @RequestParam id: Long,
+        @RequestParam title: String,
+        @RequestParam content: String,
+        principal: Principal
+    ): ResponseEntity<PostDto> {
+        try {
+            val updatedPost = postService.updatePost(id, title, content, principal)
+            return ResponseEntity.ok(updatedPost)
+        } catch (e: PostNotFoundException) {
+            throw ResponseStatusException(HttpStatus.NOT_FOUND, e.message, e)
+        } catch (e: UnauthorizedUserException) {
+            throw ResponseStatusException(HttpStatus.FORBIDDEN, e.message, e)
+        }
+    }
+
 
     @PostMapping("/{categoryId}")
     fun createPost(@RequestBody postCreationDto: PostCreationDto?, @PathVariable categoryId: Long): ResponseEntity<*> {

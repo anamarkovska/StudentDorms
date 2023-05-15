@@ -4,6 +4,9 @@ import com.example.studentdorms.domain.*
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.example.studentdorms.domain.dto.PostDto
 import com.example.studentdorms.domain.dto.UserDto
+import com.example.studentdorms.exceptions.PostNotFoundException
+import com.example.studentdorms.exceptions.UnauthorizedUserException
+import com.example.studentdorms.mapper.PostCategoryMapper
 import com.example.studentdorms.mapper.PostMapper
 import com.example.studentdorms.repository.PostCategoryRepository
 import com.example.studentdorms.repository.PostLikesRepository
@@ -16,6 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Service
+import java.security.Principal
 
 
 @Service
@@ -23,7 +27,8 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
                       val postCategoryRepository: PostCategoryRepository,
                       val postLikesService: PostLikesService,
                       val postLikesRepository: PostLikesRepository,
-                      val userService: JwtUserDetailsService, private val userRepository: UserRepository
+                      val userService: JwtUserDetailsService, private val userRepository: UserRepository,
+                        val postCategoryMapper: PostCategoryMapper
 ) : PostService{
     override fun getAllPosts(): List<PostDto> {
         val posts = repostiroy.findAll()
@@ -45,6 +50,18 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         val postsByCategory = categoryId?.let { repostiroy.findByPostCategoryId(it) }
         val postsDto = postsByCategory?.let { mapper.toDtoList(it) }
         return postsDto
+    }
+    override fun updatePost(id: Long, title: String, content: String, principal: Principal): PostDto? {
+        val post = repostiroy.findById(id)
+            .orElseThrow { PostNotFoundException("Post not found with id $id") }
+
+        if (post.user?.username != principal.name) {
+            throw UnauthorizedUserException("You are not authorized to update this post")
+        }
+
+        post.title = title
+        post.content = content
+        return mapper.toDto(repostiroy.save(post))
     }
 
     override fun createPost(postCreationDto: PostCreationDto, postCategory: Long) {

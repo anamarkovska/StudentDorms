@@ -4,6 +4,8 @@ import com.example.studentdorms.domain.Comment
 import com.example.studentdorms.domain.Post
 import com.example.studentdorms.domain.User
 import com.example.studentdorms.domain.dto.CommentDto
+import com.example.studentdorms.exceptions.PostNotFoundException
+import com.example.studentdorms.exceptions.UnauthorizedUserException
 import com.example.studentdorms.mapper.CommentMapper
 import com.example.studentdorms.repository.CommentRepository
 import com.example.studentdorms.repository.PostRepostiroy
@@ -14,6 +16,7 @@ import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2Res
 import org.springframework.data.crossstore.ChangeSetPersister
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Service
+import java.security.Principal
 import javax.persistence.EntityNotFoundException
 
 @Service
@@ -39,6 +42,7 @@ class CommentServiceImpl(
             commentRepository.save(post)
         }
     }
+
     override fun deleteComment(commentId: Long) {
         if (commentRepository.existsById(commentId)) {
             commentRepository.deleteById(commentId)
@@ -54,10 +58,29 @@ class CommentServiceImpl(
     }
 
     override fun getCommentsByPostId(postId: Long): List<CommentDto> {
-            val comments = commentRepository.findByPostId(postId)
-            return commentMapper.toDtoList(comments)
+        val comments = commentRepository.findByPostId(postId)
+        return commentMapper.toDtoList(comments)
 
+    }
+
+    override fun updateComment(commentDto: CommentDto, principal: Principal): CommentDto {
+        val comment = commentRepository.findById(commentDto.id ?: throw PostNotFoundException("Comment not found"))
+
+        if (comment.isPresent) {
+            val currentUser = userService.loadUserByUsername(principal.name)
+            val post: Post? = commentDto.postId?.let { postRepository.findById(it).orElse(null) }
+
+            if (currentUser?.username == comment.get().user?.username || currentUser?.username == post?.user?.username) {
+                comment.get().content = commentDto.content
+                commentRepository.save(comment.get())
+                return commentMapper.toDto(comment.get())
+            } else {
+                throw UnauthorizedUserException("You are not authorized to update this comment.")
+            }
+        } else {
+            throw PostNotFoundException("Comment not found.")
         }
     }
+}
 
 

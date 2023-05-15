@@ -2,6 +2,7 @@ package com.example.studentdorms.api
 
 import com.example.studentdorms.config.security.JwtTokenUtil
 import com.example.studentdorms.config.security.MyAuthenticationManager
+import com.example.studentdorms.config.security.MyPasswordEncoder
 import com.example.studentdorms.domain.Security.JwtRequest
 import com.example.studentdorms.domain.Security.JwtResponse
 import com.example.studentdorms.domain.dto.UserDto
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity
 import org.springframework.security.authentication.BadCredentialsException
 import org.springframework.security.authentication.DisabledException
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.web.bind.annotation.*
 
 
@@ -21,6 +23,7 @@ import org.springframework.web.bind.annotation.*
 @RequestMapping("/api")
 class JwtAuthenticationController(private val authenticationManager: MyAuthenticationManager,
                                   private val jwtTokenUtil: JwtTokenUtil,
+                                  private val passwordEncoder: MyPasswordEncoder,
 private val postService: PostService) {
 
     @Autowired
@@ -50,6 +53,12 @@ private val postService: PostService) {
 
     @Throws(Exception::class)
     private fun authenticate(username: String, password: String) {
+        val userDetails: UserDetails = userDetailsService!!.loadUserByUsername(username)
+
+        if (!passwordEncoder.matches(password, userDetails.password)) {
+            throw BadCredentialsException("INVALID_PASSWORD")
+        }
+
         try {
             authenticationManager!!.authenticate(UsernamePasswordAuthenticationToken(username, password))
         } catch (e: DisabledException) {
@@ -58,6 +67,7 @@ private val postService: PostService) {
             throw Exception("INVALID_CREDENTIALS", e)
         }
     }
+
 
     @GetMapping("/authenticated-user")
     fun getAuthenticatedUser(): ResponseEntity<UserDto> {

@@ -36,7 +36,7 @@ open class Post {
     var likedBy: MutableSet<User> = mutableSetOf()
 //    @OneToMany(mappedBy = "post", cascade = [CascadeType.ALL], targetEntity = PostLikes::class)
 
-
+    @OrderBy("createdAt DESC")
     var createdAt: LocalDateTime = LocalDateTime.now()
 
     @ManyToOne(fetch = FetchType.LAZY)

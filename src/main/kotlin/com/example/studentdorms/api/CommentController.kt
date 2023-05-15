@@ -1,5 +1,7 @@
 package com.example.studentdorms.api
 import com.example.studentdorms.domain.dto.CommentDto
+import com.example.studentdorms.exceptions.PostNotFoundException
+import com.example.studentdorms.exceptions.UnauthorizedUserException
 import com.example.studentdorms.service.CommentService
 import com.example.studentdorms.service.JwtUserDetailsService
 import com.example.studentdorms.service.PostService
@@ -16,6 +18,10 @@ class CommentController(
     private val postService: PostService
 ) {
 
+    @GetMapping
+    fun getAllComments(): List<CommentDto> {
+        return commentService.getAllComments()
+    }
     @GetMapping("/{postId}")
     fun getCommentsByPostId(@PathVariable postId: Long): ResponseEntity<List<CommentDto>> {
         val comments = commentService.getCommentsByPostId(postId)
@@ -44,4 +50,16 @@ class CommentController(
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build()
         }
     }
+    @PutMapping("/update")
+    fun updateComment(@RequestBody commentDto: CommentDto, principal: Principal): ResponseEntity<CommentDto> {
+        try {
+            val updatedComment = commentService.updateComment(commentDto, principal)
+            return ResponseEntity.ok(updatedComment)
+        } catch (e: PostNotFoundException) {
+            return ResponseEntity.notFound().build()
+        } catch (e: UnauthorizedUserException) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        }
+    }
+
 }
