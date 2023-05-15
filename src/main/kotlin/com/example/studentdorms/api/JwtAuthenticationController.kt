@@ -79,4 +79,10 @@ private val postService: PostService) {
         }
     }
 
+    @GetMapping("/{userId}/isAdmin")
+    fun checkIfUserIsAdmin(@PathVariable userId: Long): ResponseEntity<Boolean> {
+        val isAdmin = userDetailsService?.isAdmin(userId) ?: false
+        return ResponseEntity.ok(isAdmin)
+    }
+
 }

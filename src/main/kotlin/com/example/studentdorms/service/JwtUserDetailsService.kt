@@ -51,4 +51,9 @@ class JwtUserDetailsService(
         newUser.password=(passwordEncoder.encode(user.password))
         return userRepository.save(newUser)
     }
+
+    fun isAdmin(userId: Long): Boolean {
+        val user = userRepository.findById(userId)
+        return user.map { it.isAdmin }.orElse(false)
+    }
 }
