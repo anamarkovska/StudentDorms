@@ -6,7 +6,11 @@ import org.springframework.stereotype.Component
 import java.util.*
 
 @Component
-class PostMapper(private val userMapper: UserMapper, private val commentMapper: CommentMapper, private val postCategoryMapper: PostCategoryMapper) {
+class PostMapper(
+    private val userMapper: UserMapper,
+    private val commentMapper: CommentMapper,
+    private val postCategoryMapper: PostCategoryMapper
+) {
 
     fun toDto(post: Post): PostDto {
         return PostDto(

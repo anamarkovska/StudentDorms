@@ -15,22 +15,8 @@ class UserMapper {
         )
     }
 
-//    fun toEntity(userDto: UserDto): User {
-//        return User(
-//            id = userDto.id,
-//            username = userDto.username,
-//            password = "", // Set password to empty string as it's not available in UserDto
-//            isAdmin = false, // Set isAdmin to false as it's not available in UserDto
-//            posts = emptyList(), // Set posts to emptyList as it's not available in UserDto
-//            comments = emptyList() // Set comments to emptyList as it's not available in UserDto
-//        )
-//    }
-
     fun toDtoList(users: MutableSet<User>): List<UserDto> {
         return users.map { toDto(it) }
     }
 
-//    fun toEntityList(userDtos: List<UserDto>): List<User> {
-//        return userDtos.map { toEntity(it) }
-//    }
 }

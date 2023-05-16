@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import javax.persistence.*
 import java.time.LocalDate
 import java.time.LocalTime
+
 @Entity
 @Table(name = "menu_items")
 open class MenuItem {
@@ -20,7 +21,7 @@ open class MenuItem {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties("menuItems")
-    var studentDorm:StudentDorm? = null
+    var studentDorm: StudentDorm? = null
 
     var date: LocalDate = LocalDate.now()
 

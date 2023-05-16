@@ -80,10 +80,4 @@ class MenuItemController(private val menuItemService: MenuItemService,
         return ResponseEntity.ok(menuItemsByStudentDorm)
     }
 
-//    @GetMapping("/student-dorms/{dormId}")
-//    fun getMenuItemsByCategoryAndStudentDorm(@PathVariable categoryId: Long, @PathVariable dormId: Long):ResponseEntity<List<MenuItem>>{
-//        val menuItemsByCategoryAndStudentDorm = menuItemService.getMenuItemsByCategoryAndStudentDorm(categoryId, dormId)
-//        return ResponseEntity.ok(menuItemsByCategoryAndStudentDorm)
-//    }
-
 }

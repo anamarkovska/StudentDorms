@@ -1,4 +1,5 @@
 package com.example.studentdorms.domain
+
 import com.example.studentdorms.domain.dto.CommentDto
 import com.example.studentdorms.domain.dto.PostCreationDto
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
@@ -35,6 +36,7 @@ open class Comment {
         this.post = post
         this.createdAt = createdAt
     }
+
     constructor(commentDTO: CommentDto, post: Post, user: User) {
         this.id = id
         this.content = commentDTO.content

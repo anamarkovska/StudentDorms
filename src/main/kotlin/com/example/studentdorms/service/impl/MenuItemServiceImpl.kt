@@ -14,11 +14,12 @@ import java.time.LocalTime
 import java.util.*
 
 
-
 @Service
-class MenuItemServiceImpl(val repository: MenuItemRepository,
-                          val categoryRepository: MenuCategoryRepository,
-                            val studentDormRepository: StudentDormRepository) : MenuItemService {
+class MenuItemServiceImpl(
+    val repository: MenuItemRepository,
+    val categoryRepository: MenuCategoryRepository,
+    val studentDormRepository: StudentDormRepository
+) : MenuItemService {
     override fun getAllMenuItems(): List<MenuItem?>? {
         return repository.findAll()
     }
@@ -27,30 +28,27 @@ class MenuItemServiceImpl(val repository: MenuItemRepository,
         return id?.let { repository.getById(it) }
     }
 
-//    override fun createMenuItem(menuItem: MenuItem?): MenuItem? {
-//        return menuItem?.let { repository.save(it) }
-//    }
-override fun createMenuItem(menuItemDto: MenuItemDTO): MenuItem {
-    val menuItem = MenuItem()
-    menuItem.name = menuItemDto?.name ?: ""
-    menuItem.date = menuItemDto?.date ?: LocalDate.now()
-    menuItem.startTime = menuItemDto?.startTime ?: LocalTime.MIN
-    menuItem.endTime = menuItemDto?.endTime ?: LocalTime.MAX
+    override fun createMenuItem(menuItemDto: MenuItemDTO): MenuItem {
+        val menuItem = MenuItem()
+        menuItem.name = menuItemDto?.name ?: ""
+        menuItem.date = menuItemDto?.date ?: LocalDate.now()
+        menuItem.startTime = menuItemDto?.startTime ?: LocalTime.MIN
+        menuItem.endTime = menuItemDto?.endTime ?: LocalTime.MAX
 
-    menuItemDto?.categoryId?.let { categoryId ->
-        val category = categoryRepository.findById(categoryId)
-            .orElseThrow { IllegalArgumentException("Invalid category id: $categoryId") }
-        menuItem.category = category
+        menuItemDto?.categoryId?.let { categoryId ->
+            val category = categoryRepository.findById(categoryId)
+                .orElseThrow { IllegalArgumentException("Invalid category id: $categoryId") }
+            menuItem.category = category
+        }
+
+        menuItemDto?.studentDormId?.let { studentDormId ->
+            val studentDorm = studentDormRepository.findById(studentDormId)
+                .orElseThrow { IllegalArgumentException("Invalid student dorm id: $studentDormId") }
+            menuItem.studentDorm = studentDorm
+        }
+
+        return repository.save(menuItem)
     }
-
-    menuItemDto?.studentDormId?.let { studentDormId ->
-        val studentDorm = studentDormRepository.findById(studentDormId)
-            .orElseThrow { IllegalArgumentException("Invalid student dorm id: $studentDormId") }
-        menuItem.studentDorm = studentDorm
-    }
-
-    return repository.save(menuItem)
-}
 
     override fun updateMenuItem(id: Long?, menuItemDTO: MenuItemDTO?): MenuItem? {
         val existingMenuItem = id?.let { repository.findById(it).orElse(null) }
@@ -78,7 +76,6 @@ override fun createMenuItem(menuItemDto: MenuItemDTO): MenuItem {
 
         return existingMenuItem?.let { repository.save(it) }
     }
-
 
 
     override fun deleteMenuItem(id: Long?) {

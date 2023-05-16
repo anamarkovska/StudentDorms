@@ -19,7 +19,7 @@ class JwtUserDetailsService(
     private val passwordEncoder: MyPasswordEncoder
 
 ) : UserDetailsService {
-    fun findAuthenticatedUser() : UserDetails {
+    fun findAuthenticatedUser(): UserDetails {
         val authentication = SecurityContextHolder.getContext().authentication
 
         if (authentication != null && authentication.isAuthenticated && authentication.principal is UserDetails) {
@@ -43,12 +43,12 @@ class JwtUserDetailsService(
     }
 
     fun save(user: UserDto): com.example.studentdorms.domain.User? {
-        if(userRepository.existsByUsername(user.username)){
+        if (userRepository.existsByUsername(user.username)) {
             throw UsernameAlreadyExistsException("username exists")
         }
         val newUser = com.example.studentdorms.domain.User()
-        newUser.username=(user.username)
-        newUser.password=(passwordEncoder.encode(user.password))
+        newUser.username = (user.username)
+        newUser.password = (passwordEncoder.encode(user.password))
         return userRepository.save(newUser)
     }
 

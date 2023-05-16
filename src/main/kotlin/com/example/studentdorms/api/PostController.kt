@@ -17,10 +17,12 @@ import java.security.Principal
 @RestController
 @CrossOrigin
 @RequestMapping("/api/posts")
-class PostController(private val postService: PostService,
-                     private val userService: JwtUserDetailsService,
-                     private val userRepository: UserRepository,
-                     private val postLikesService: PostLikesService) {
+class PostController(
+    private val postService: PostService,
+    private val userService: JwtUserDetailsService,
+    private val userRepository: UserRepository,
+    private val postLikesService: PostLikesService
+) {
 
     @GetMapping
     fun getAllPosts(): ResponseEntity<List<PostDto?>> {
@@ -38,6 +40,7 @@ class PostController(private val postService: PostService,
         val postsByCategory = postService.getPostsByCategory(categoryId)
         return ResponseEntity.ok(postsByCategory)
     }
+
     @PutMapping("/update")
     fun updatePost(
         @RequestParam id: Long,
@@ -55,7 +58,6 @@ class PostController(private val postService: PostService,
         }
     }
 
-
     @PostMapping("/{categoryId}")
     fun createPost(@RequestBody postCreationDto: PostCreationDto?, @PathVariable categoryId: Long): ResponseEntity<*> {
         if (postCreationDto != null) {
@@ -64,12 +66,6 @@ class PostController(private val postService: PostService,
         }
         return ResponseEntity.badRequest().build<String>()
     }
-
-//    @PutMapping("/{postId}/like")
-//    fun likePost(@PathVariable postId: Long?): ResponseEntity<*>? {
-//        postId?.let { postService.like(it) }
-//        return ResponseEntity.ok().build<Any>()
-//    }
 
     @PostMapping("/{postId}/like")
     fun likePost(@PathVariable postId: Long?): ResponseEntity<*> {

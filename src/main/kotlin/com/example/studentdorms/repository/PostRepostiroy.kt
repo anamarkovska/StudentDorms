@@ -8,11 +8,9 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface PostRepostiroy:JpaRepository<Post,Long> {
-//    fun findLikedByById(postId: Long): Set<User>
-//override fun findAll(): MutableList<Post>
+interface PostRepostiroy : JpaRepository<Post, Long> {
 
     fun findByPostCategoryId(categoryId: Long): List<Post>
-    fun findCategoryById(categoryId: Long) : PostCategory
+    fun findCategoryById(categoryId: Long): PostCategory
 
 }

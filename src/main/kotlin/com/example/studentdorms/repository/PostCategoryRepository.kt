@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository
 import java.util.*
 
 @Repository
-interface PostCategoryRepository : JpaRepository<PostCategory,Long> {
-
+interface PostCategoryRepository : JpaRepository<PostCategory, Long> {
 }

@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class StudentDormServiceImpl(val repository: StudentDormRepository) : StudentDormService {
-
     override fun getAllStudentDorms(): List<StudentDorm>? {
         return repository.findAll()
     }

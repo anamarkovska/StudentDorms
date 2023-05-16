@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 
 @Repository
-interface StudentDormRepository : JpaRepository<StudentDorm,Long>{
+interface StudentDormRepository : JpaRepository<StudentDorm, Long> {
 }

@@ -45,7 +45,7 @@ open class User {
         posts: List<Post> = emptyList(),
         comments: List<Comment> = emptyList(),
 
-    ) {
+        ) {
         this.id = id
         this.username = username
         this.password = password

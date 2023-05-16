@@ -15,7 +15,12 @@ open class MenuCategory(
     @Column(nullable = false)
     var name: String = "",
 
-    @OneToMany(mappedBy = "category", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, targetEntity = MenuItem::class)
+    @OneToMany(
+        mappedBy = "category",
+        cascade = [CascadeType.ALL],
+        fetch = FetchType.LAZY,
+        targetEntity = MenuItem::class
+    )
     var items: List<MenuItem> = emptyList()
 ) {
     constructor() : this(null, "", emptyList())

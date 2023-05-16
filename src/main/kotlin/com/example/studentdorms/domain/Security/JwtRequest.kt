@@ -8,7 +8,6 @@ open class JwtRequest : Serializable {
 
     var password: String = ""
 
-    //need default constructor for JSON Parsing
     constructor()
     constructor(username: String, password: String) {
         this.username = username

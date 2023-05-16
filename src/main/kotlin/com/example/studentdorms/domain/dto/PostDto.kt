@@ -12,7 +12,7 @@ class PostDto {
     var likedBy: MutableSet<UserDto>? = mutableSetOf()
     var createdAt: LocalDateTime = LocalDateTime.now()
     var postCategoryDto: PostCategoryDto? = null
-    var comments: List<CommentDto> = emptyList() // Added comments field
+    var comments: List<CommentDto> = emptyList()
 
     constructor(
         id: Long?,
@@ -20,10 +20,10 @@ class PostDto {
         content: String,
         userDto: UserDto?,
         likedBy: List<UserDto>,
-        createdAt : LocalDateTime,
+        createdAt: LocalDateTime,
         postCategoryDto: PostCategoryDto?,
-        comments: List<CommentDto> // Added comments parameter
-    ){
+        comments: List<CommentDto>
+    ) {
         this.id = id
         this.title = title
         this.content = content
@@ -31,7 +31,7 @@ class PostDto {
         this.likedBy?.addAll(likedBy)
         this.createdAt = createdAt
         this.postCategoryDto = postCategoryDto
-        this.comments = comments // Set comments field
+        this.comments = comments
     }
 
 

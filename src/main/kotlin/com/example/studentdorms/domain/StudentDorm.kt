@@ -1,4 +1,5 @@
 package com.example.studentdorms.domain
+
 import javax.persistence.*
 
 @Entity
@@ -10,7 +11,12 @@ open class StudentDorm {
 
     var dormName: String = ""
 
-    @OneToMany(mappedBy = "studentDorm", cascade = [CascadeType.ALL], fetch = FetchType.LAZY, targetEntity = MenuItem::class)
+    @OneToMany(
+        mappedBy = "studentDorm",
+        cascade = [CascadeType.ALL],
+        fetch = FetchType.LAZY,
+        targetEntity = MenuItem::class
+    )
     var menuItems: List<MenuItem> = emptyList()
 
     constructor()

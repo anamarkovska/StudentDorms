@@ -23,15 +23,16 @@ import java.security.Principal
 
 
 @Service
-class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
-                      val postCategoryRepository: PostCategoryRepository,
-                      val postLikesService: PostLikesService,
-                      val postLikesRepository: PostLikesRepository,
-                      val userService: JwtUserDetailsService, private val userRepository: UserRepository,
-                        val postCategoryMapper: PostCategoryMapper
-) : PostService{
+class PostServiceImpl(
+    val repository: PostRepostiroy,
+    val mapper: PostMapper,
+    val postCategoryRepository: PostCategoryRepository,
+    val postLikesRepository: PostLikesRepository,
+    val userService: JwtUserDetailsService,
+    val userRepository: UserRepository
+) : PostService {
     override fun getAllPosts(): List<PostDto> {
-        val posts = repostiroy.findAll()
+        val posts = repository.findAll()
         val postsDto = mapper.toDtoList(posts)
         return postsDto
     }
@@ -43,16 +44,17 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
     }
 
     override fun getById(id: Long?): Post? {
-        return id?.let { repostiroy.getById(it) }
+        return id?.let { repository.getById(it) }
     }
 
     override fun getPostsByCategory(categoryId: Long?): List<PostDto>? {
-        val postsByCategory = categoryId?.let { repostiroy.findByPostCategoryId(it) }
+        val postsByCategory = categoryId?.let { repository.findByPostCategoryId(it) }
         val postsDto = postsByCategory?.let { mapper.toDtoList(it) }
         return postsDto
     }
+
     override fun updatePost(id: Long, title: String, content: String, principal: Principal): PostDto? {
-        val post = repostiroy.findById(id)
+        val post = repository.findById(id)
             .orElseThrow { PostNotFoundException("Post not found with id $id") }
 
         if (post.user?.username != principal.name) {
@@ -61,7 +63,7 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
 
         post.title = title
         post.content = content
-        return mapper.toDto(repostiroy.save(post))
+        return mapper.toDto(repository.save(post))
     }
 
     override fun createPost(postCreationDto: PostCreationDto, postCategory: Long) {
@@ -70,34 +72,28 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         val category: PostCategory? = postCategoryRepository.findById(postCategory).orElse(null)
         category?.let {
             val post = Post(postCreationDto, it, user)
-            repostiroy.save(post)
+            repository.save(post)
         }
     }
 
-//    override fun createLike(postId: Long, user: User) {
-//        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
-//        val postLike = PostLikes(user,post)
-//        postLikesRepository.save(postLike)
-//    }
-
     override fun createLike(postId: Long, user: User) {
-        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        val post = repository.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
         val postLikesId = PostLikesId(post.id!!, user.id!!)
         val postLike = PostLikes(postLikesId, post, user)
         postLikesRepository.save(postLike)
     }
 
     override fun delete(postId: Long?) {
-        postId?.let { repostiroy.deleteById(it) }
+        postId?.let { repository.deleteById(it) }
     }
 
     override fun getNumberOfLikes(postId: Long): Long {
-        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        val post = repository.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
         return post.likedBy.size.toLong()
     }
 
     override fun getUsernamesFromPostLikes(postId: Long): List<String> {
-        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        val post = repository.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
         return post.likedBy.map { user -> user.username }
     }
 
@@ -105,12 +101,12 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
         val userDetails: UserDetails = userService.findAuthenticatedUser()
         val user: User = userRepository.findByUsername(userDetails.username)
         println("deleteLike is invoked for user ${user.username}")
-        val post = repostiroy.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
+        val post = repository.findById(postId).orElseThrow { UsernameNotFoundException("Post not found") }
         val likedByUser = post.likedBy.find { it.id == user.id }
         if (likedByUser != null) {
             println("user is not null")
             post.likedBy.remove(likedByUser)
-            repostiroy.save(post)
+            repository.save(post)
         }
     }
 
@@ -125,7 +121,5 @@ class PostServiceImpl(val repostiroy: PostRepostiroy, val mapper: PostMapper,
             return null
         }
     }
-
-
 
 }

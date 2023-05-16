@@ -18,15 +18,14 @@ import javax.servlet.http.HttpServletResponse
 @Component
 class JwtRequestFilter constructor(
     private val jwtUserDetailsService: JwtUserDetailsService,
-    private val jwtTokenUtil: JwtTokenUtil) : OncePerRequestFilter() {
+    private val jwtTokenUtil: JwtTokenUtil
+) : OncePerRequestFilter() {
 
     @Throws(ServletException::class, IOException::class)
     override fun doFilterInternal(request: HttpServletRequest, response: HttpServletResponse, chain: FilterChain) {
         val requestTokenHeader = request.getHeader("Authorization")
         var username: String? = null
         var jwtToken: String? = null
-        // JWT Token is in the form "Bearer token". Remove Bearer word and get
-        // only the Token
         if (requestTokenHeader != null && requestTokenHeader.startsWith("Bearer ")) {
             jwtToken = requestTokenHeader.substring(7)
             try {
@@ -40,20 +39,13 @@ class JwtRequestFilter constructor(
             logger.warn("JWT Token does not begin with Bearer String")
         }
 
-        // Once we get the token validate it.
         if (username != null && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = jwtUserDetailsService!!.loadUserByUsername(username)
-
-            // if token is valid configure Spring Security to manually set
-            // authentication
             if (jwtTokenUtil!!.validateToken(jwtToken, userDetails)) {
                 val usernamePasswordAuthenticationToken = UsernamePasswordAuthenticationToken(
                     userDetails, null, userDetails.authorities
                 )
                 usernamePasswordAuthenticationToken.details = WebAuthenticationDetailsSource().buildDetails(request)
-                // After setting the Authentication in the context, we specify
-                // that the current user is authenticated. So it passes the
-                // Spring Security Configurations successfully.
                 SecurityContextHolder.getContext().authentication = usernamePasswordAuthenticationToken
             }
         }

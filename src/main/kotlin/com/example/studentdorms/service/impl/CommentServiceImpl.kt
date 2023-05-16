@@ -23,7 +23,7 @@ import javax.persistence.EntityNotFoundException
 class CommentServiceImpl(
     private val commentRepository: CommentRepository,
     private val commentMapper: CommentMapper,
-    private val postRepository:PostRepostiroy,
+    private val postRepository: PostRepostiroy,
     private val userService: JwtUserDetailsService,
     private val userRepository: UserRepository
 ) : CommentService {

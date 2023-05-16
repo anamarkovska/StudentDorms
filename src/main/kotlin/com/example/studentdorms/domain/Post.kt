@@ -34,7 +34,6 @@ open class Post {
         inverseJoinColumns = arrayOf(JoinColumn(name = "user_id"))
     )
     var likedBy: MutableSet<User> = mutableSetOf()
-//    @OneToMany(mappedBy = "post", cascade = [CascadeType.ALL], targetEntity = PostLikes::class)
 
     @OrderBy("createdAt ASC")
     var createdAt: LocalDateTime = LocalDateTime.now()
@@ -66,7 +65,7 @@ open class Post {
         this.postCategory = postCategory
     }
 
-    constructor(postCreationDto: PostCreationDto, postCategory:PostCategory, user: User) {
+    constructor(postCreationDto: PostCreationDto, postCategory: PostCategory, user: User) {
         this.id = id
         this.title = postCreationDto.title
         this.content = postCreationDto.content
